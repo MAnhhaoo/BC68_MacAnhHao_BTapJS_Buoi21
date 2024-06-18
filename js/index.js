@@ -6,6 +6,7 @@ console.log("heeee");
 function themNhanVien() {
     let nhanVien = new NhanVien();
     let arrField = document.querySelectorAll("#formQLNV input, #formQLNV select");
+    let isValid = true;
     for (let field of arrField) {
         let { value, id } = field;
         if (id === "luongCB" || id === "gioLam") {
@@ -18,18 +19,71 @@ function themNhanVien() {
         let parent = field.parentElement.parentElement ;  
         let errorField = parent.querySelectorAll(".sp-thongbao");
         console.log(errorField);
-        checkEmptyValue(value,errorField);
-        console.log(checkEmptyValue); 
-        
+       let check = checkEmptyValue(value,errorField);
+       if (!check) isValid = false;
+
+       if ( check && id =="tknv") {
+        let lengthValid = checkLengthValue(value, errorField[0], 4, 6);
+            if (!lengthValid) isValid = false;
+       }   
+
+
+
+       if ( check && id =="email") {
+        let emailValid = checkEmail(value, errorField[0]);
+        if (!emailValid) isValid = false;
+       }
+       
+
+
+       if ( check && id =="name") {
+        let hoVaTen = checkName(value, errorField[0]);
+        if (!hoVaTen) isValid = false;
+       }
+
+
+       if ( check && id =="password") {
+        let Pass = checkPass(value, errorField[0]);
+        if (!Pass) isValid = false;
+       }
+
+
+       if ( check && id =="datepicker") {
+        let date = checkDate(value, errorField[0]);
+        if (!date) isValid = false;
+       }
+
+
+       if ( check && id =="luongCB") {
+        let luong = checkLuong(value, errorField[0]);
+        if (!luong) isValid = false;
+       }
+
+
+       if ( check && id =="chucvu") {
+        let chucVu = checkChucVu(value, errorField[0]);
+        if (!chucVu) isValid = false;
+       }
+
+
+
+       if ( check && id =="gioLam") {
+        let gioLAm = checkGioLam(value, errorField[0]);
+        if (!gioLAm) isValid = false;
+       }
+
     }
+
     console.log(nhanVien);
 
-      
+    if (!isValid) return null;
     ArrNhanVien.push(nhanVien);
     renderArrNhanVien();
     saveLocalStorage();
     document.getElementById("formQLNV").reset();
-    return nhanVien;
+  
+        return nhanVien;
+    
 }
 
 
@@ -37,6 +91,10 @@ function themNhanVien() {
 document.getElementById("formQLNV").onsubmit = function (event) {
     event.preventDefault();
     let nhanVien = themNhanVien();
+    if (!nhanVien) {
+        return ;
+    }
+    
 }
 
 getLocalStorage();
