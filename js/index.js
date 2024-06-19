@@ -77,6 +77,7 @@ function themNhanVien() {
     console.log(nhanVien);
 
     if (!isValid) return null;
+    console.log(nhanVien); // Kiểm tra giá trị nhanVien trước khi thêm vào mảng
     ArrNhanVien.push(nhanVien);
     renderArrNhanVien();
     saveLocalStorage();
@@ -100,9 +101,9 @@ document.getElementById("formQLNV").onsubmit = function (event) {
 getLocalStorage();
 renderArrNhanVien();
 
-function renderArrNhanVien() {
+function renderArrNhanVien(arr = ArrNhanVien) {
     let content = "";
-    for (let nhanVien of ArrNhanVien) {
+    for (let nhanVien of arr) {
         let newArrNhanVien = new NhanVien();
         Object.assign(newArrNhanVien,nhanVien);
         console.log(newArrNhanVien)
@@ -127,6 +128,7 @@ function renderArrNhanVien() {
 
 
 
+
 // theem dữ liệu 
 function saveLocalStorage (key= "ArrNhanVien", value=ArrNhanVien) {
     let stringJson = JSON.stringify(value);
@@ -134,10 +136,23 @@ function saveLocalStorage (key= "ArrNhanVien", value=ArrNhanVien) {
 }
 
 // lấy dữ liệu 
-function getLocalStorage (key= "ArrNhanVien") {
-    let arrLocal =  localStorage.getItem(key);
+// function getLocalStorage (key= "ArrNhanVien") {
+//     let arrLocal =  localStorage.getItem(key);
+//     if (arrLocal) {
+//         ArrNhanVien = JSON.parse(arrLocal);
+//         console.log(ArrNhanVien);
+//         renderArrNhanVien();       
+//     }
+// }
+function getLocalStorage(key = "ArrNhanVien") {
+    let arrLocal = localStorage.getItem(key);
     if (arrLocal) {
-        ArrNhanVien = JSON.parse(arrLocal);
+        let arr = JSON.parse(arrLocal);
+        ArrNhanVien = arr.map(item => {
+            let nhanVien = new NhanVien();
+            Object.assign(nhanVien, item);
+            return nhanVien;
+        });
         renderArrNhanVien();       
     }
 }
@@ -202,3 +217,30 @@ function updateNhanVien () {
 }
 
 document.querySelector("#btnCapNhat").onclick = updateNhanVien ;
+
+
+// chức năng tìm kiếm nhân viên trim() loại bỏ cách khoảng trắng ở đầu và cuối câu toLowerCase() lọc dữ liệu về chữ thường 
+
+
+
+
+
+function searchNhanVien (event) {
+ console.log(event.target.value);
+ 
+ let newKeyWord = removeVietnameseTones (event.target.value.toLowerCase().trim());
+
+
+let arrNhanVienFilter = ArrNhanVien.filter((item, index) => {
+ console.log(item)
+    
+ let newLoaiNhanVien = removeVietnameseTones(item.xepLoai().toLowerCase().trim());
+ 
+ return newLoaiNhanVien.includes(newKeyWord);
+}) ;
+    renderArrNhanVien(arrNhanVienFilter);
+    console.log(renderArrNhanVien);
+} ;
+
+document.getElementById("searchName").oninput = searchNhanVien;
+
