@@ -77,7 +77,7 @@ function themNhanVien() {
     console.log(nhanVien);
 
     if (!isValid) return null;
-    console.log(nhanVien); // Kiểm tra giá trị nhanVien trước khi thêm vào mảng
+    console.log(nhanVien); 
     ArrNhanVien.push(nhanVien);
     renderArrNhanVien();
     saveLocalStorage();
@@ -136,14 +136,7 @@ function saveLocalStorage (key= "ArrNhanVien", value=ArrNhanVien) {
 }
 
 // lấy dữ liệu 
-// function getLocalStorage (key= "ArrNhanVien") {
-//     let arrLocal =  localStorage.getItem(key);
-//     if (arrLocal) {
-//         ArrNhanVien = JSON.parse(arrLocal);
-//         console.log(ArrNhanVien);
-//         renderArrNhanVien();       
-//     }
-// }
+
 function getLocalStorage(key = "ArrNhanVien") {
     let arrLocal = localStorage.getItem(key);
     if (arrLocal) {
@@ -220,9 +213,6 @@ document.querySelector("#btnCapNhat").onclick = updateNhanVien ;
 
 
 // chức năng tìm kiếm nhân viên trim() loại bỏ cách khoảng trắng ở đầu và cuối câu toLowerCase() lọc dữ liệu về chữ thường 
-
-
-
 
 
 function searchNhanVien (event) {
